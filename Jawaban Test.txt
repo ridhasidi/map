@@ -1,0 +1,25 @@
+1. ReactJS adalah sebuah library JavaScript yang bersifat open-source untuk membuat user interface, terutama untuk pembuatan single-page applications.
+
+2. Asynchronous adalah proses di mana eksekusi tidak selalu berurutan, tapi berdasarkan waktu berjalannya proses tersebut. Jika pada proses synchronous proses akan berjalan satu per satu sesui urutan dan dapat menyebabkan waktu loading yang lama serta blocking.
+Sedangkan pada proses asynchronous, beberapa proses dapat berjalan bersamaan sehingga dapat memangkas waktu loading.
+
+3. Untuk menerapkan proses asynchronous di ReactJS sangat mudah. Jika pembuatan inisialisasi project dilakukan dengan command create-react-app, maka webpack dan babel juga akan secara otomatis terinstall dan proses asynchronous dapat secara langsung digunakan.
+Namun, jika harus menyusun webpack sendiri, maka harus melakukan konfigurasi babel terlebih dahulu. 
+
+4. SQL Query:
+SELECT 
+	d.longitude, 
+	d.latitude, 
+	d.brand,
+	'2021-10-20 07:00:00 to 2021-10-20 08:00:00' AS "range",
+	sum(d.user_count) AS "user_per_brand", 
+	(
+		SELECT sum(d2.user_count)
+		FROM "Data" d2
+		WHERE d.longitude = d2.longitude 
+		GROUP BY d2.latitude, d2.longitude
+	) AS "total_user"
+FROM "Data" d 
+WHERE d."time" BETWEEN '2021-10-20 07:00:00.000' AND '2021-10-20 08:00:00.000'
+GROUP BY d.brand, d.latitude, d.longitude 
+ORDER BY d.longitude 

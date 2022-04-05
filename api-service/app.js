@@ -2,7 +2,7 @@ const cors = require("cors");
 const express = require("express");
 const app = express();
 const port = 4000;
-const { Data, sequelize } = require("./models/index");
+const { sequelize } = require("./models/index");
 const { QueryTypes } = require("sequelize");
 
 app.use(cors());
@@ -15,7 +15,6 @@ app.get("/", (req, res) => {
 
 app.get("/data", async (req, res) => {
   try {
-    // sequelize
     const query = `
     SELECT 
       "d"."longitude",
@@ -43,15 +42,15 @@ app.get("/data", async (req, res) => {
     for (let i = 0; i < data.length; i++) {
       let obj = {};
       if (i === 0 || data[i].longitude !== data[i - 1].longitude) {
-        obj.longitude = data[i].longitude;
-        obj.latitude = data[i].latitude;
+        obj.longitude = +data[i].longitude;
+        obj.latitude = +data[i].latitude;
         obj.range = data[i].range;
-        obj.total_user = data[i].total_user;
-        obj.detail = [{ brand: data[i].brand, user_per_brand: data[i].user_per_brand }];
+        obj.total_user = +data[i].total_user;
+        obj.detail = [{ brand: data[i].brand, user_per_brand: +data[i].user_per_brand }];
         result.push(obj);
       }
       if (i !== 0 && data[i].longitude === data[i - 1].longitude) {
-        result[result.length - 1].detail.push({ brand: data[i].brand, user_per_brand: data[i].user_per_brand });
+        result[result.length - 1].detail.push({ brand: data[i].brand, user_per_brand: +data[i].user_per_brand });
       }
     }
     res.status(200).json(result);
